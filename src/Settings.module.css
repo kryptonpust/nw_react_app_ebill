@@ -1,0 +1,31 @@
+.root{
+    display: flex;
+    padding: 2rem;
+}
+
+
+
+
+
+
+
+.field{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    flex: 1;
+}
+
+.title{
+    margin: 2px;
+    background-color: royalblue;
+}
+.edit{
+    margin-left: 10px;
+    background-color: seagreen;
+}
+.button{
+    margin: 2px;
+
+}
