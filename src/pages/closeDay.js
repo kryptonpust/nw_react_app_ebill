@@ -62,6 +62,7 @@ export default function CloseDay() {
                 disabled={parseFloat(context.settings.gtotal) !== parseFloat(data)}
                 onClick={async () => {
                     setShow(true)
+                    window.db.close()
                     if (!fs.existsSync('./backup')) {
                         fs.mkdirSync('./backup')
                     }
