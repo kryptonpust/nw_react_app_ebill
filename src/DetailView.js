@@ -18,30 +18,7 @@ const paper = {
         height: '356mm',
     }
 }
-// const settingsvalues = [
-//     { name: 'title', val: 'Rajshahi Krishi Unnayan Bank' },
-//     { name: 'sub_title', val: 'Mollaparahat Branch' },
-//     { name: 'vat_percent', val: '5' },
-//     { name: 'revenue_threshold', val: '400' },
-//     { name: 'revenue_amount', val: '10' },
-//     { name: 'meter_no_length', val: '4' },
-//     { name: 'precision_calculate', val: '3' },
-//     { name: 'date_format', val: 'd M y' },
-//     { name: 'bill_title', val: 'Daily Electricity Bill Register' },
-//     { name: 'bill_end_title', val: 'Following Amount Money is reserved ....' },
-//     { name: 'user_name', val: '(Mizanur Rahman)' },
-//     { name: 'user_designation', val: 'Officer' },
-//     { name: 'user_address', val: 'Rakab, Mollaparahat, Rajshahi' },
-//     { name: 'ac_no', val: 'CD-47' },
-//     { name: 'vat_account', val: '41/10B' },
-//     { name: 'table_row_number', val: '3' },
-//     { name: 'paper_type', val: 'A4' },
-//     { name: 'table_per_page', val: '3' },
-//     { name: 'row_per_table', val: '40' },
-//     { name: 'font_size', val: '17' },
-// ]
 
-//MAX DATA 120
 function gendata(size) {
     let data = []
     for (let i = 0; i < size; i++) {
@@ -436,7 +413,9 @@ function TopSheet(props) {
             marginRight: '100px',
             "& > img": {
                 width: '80px',
-                height: '80px'
+                height: '80px',
+                margin: '5px',
+
             }
         },
         titles: {
@@ -452,8 +431,8 @@ function TopSheet(props) {
                 <div className={classes.logos}>
                     <img src={logo} alt="Logo" />
                     <div className={classes.titles}>
-                        <h1>{props.settings.title ? props.settings.title : 'undefined'}</h1>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{props.settings.sub_title ? props.settings.sub_title : 'undefined'}</div>
+                        <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>{props.settings.title ? props.settings.title : 'undefined'}</div>
+                        <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{props.settings.sub_title ? props.settings.sub_title : 'undefined'}</div>
                     </div>
                 </div>
 
@@ -468,8 +447,8 @@ function TopSheet(props) {
             </div>
             {props.summery && <div className={classes.sum}>
                 <TwoRow title={"No of Bill"} value={props.summery.no_of_bill} />
-                <TwoRow title={"Bill Amount:"} value={`Tk.${parseFloat(props.summery.vamount).toFixed(parseFloat(props.settings.precision_calculate))}/-`} titleValue={props.settings.ac_no} />
-                <TwoRow title={"VAT Amount:"} value={`Tk.${parseFloat(props.summery.vat).toFixed(parseFloat(props.settings.precision_calculate))}/-`} titleValue={props.settings.vat_account} />
+                <TwoRow title={"Bill Amount"} value={`Tk.${parseFloat(props.summery.vamount).toFixed(parseFloat(props.settings.precision_calculate))}/-`} titleValue={props.settings.ac_no} />
+                <TwoRow title={"VAT Amount"} value={`Tk.${parseFloat(props.summery.vat).toFixed(parseFloat(props.settings.precision_calculate))}/-`} titleValue={props.settings.vat_account} />
                 <TwoRow title={"G. Total"} value={`Tk.${parseFloat(props.summery.amount).toFixed(parseFloat(props.settings.precision_calculate))}/-`} />
                 <TwoRowTwoCol title1={"No of Rev."} value1={parseInt(props.summery.rev) / parseInt(props.settings.revenue_amount)} title2={"Revenue"} value2={props.summery.rev} />
             </div>}
@@ -524,7 +503,6 @@ export const Field = (props) => {
             borderStyle: 'hidden',
             boxShadow: '0 0 0 1px',
 
-
             "& > tbody > tr >td":
             {
                 padding: '10px',
@@ -539,7 +517,7 @@ export const Field = (props) => {
         <table className={classes.root}>
             {props.titleValue && <tbody>
                 <tr>
-                    <td rowSpan="2" style={{ wordWrap: "break-word" }}>{props.title}</td>
+                    <td rowSpan="2">{props.title}</td>
                     <td>{props.titleValue} </td>
                 </tr>
                 <tr>
@@ -566,6 +544,8 @@ const TwoRow = (props) => {
             borderRadius: '5px',
             borderStyle: 'hidden',
             boxShadow: '0 0 0 1px',
+            height: '10vh',
+            overflow: 'visible',
             "& > tbody > tr >td":
             {
                 padding: '10px',
@@ -579,7 +559,7 @@ const TwoRow = (props) => {
         <table className={classes.root}>
             <tbody>
                 <tr>
-                    <td >{props.title} <strong>{props.titleValue ? props.titleValue : ''}</strong></td>
+                    <td >{props.title} <br></br><strong>{props.titleValue ? props.titleValue : ''}</strong></td>
                 </tr>
                 <tr>
                     <td>{props.value} </td>
@@ -599,6 +579,8 @@ const TwoRowTwoCol = (props) => {
             borderRadius: '5px',
             borderStyle: 'hidden',
             boxShadow: '0 0 0 1px',
+            height: '10vh',
+            overflow: 'visible',
             "& > tbody > tr >td":
             {
                 padding: '10px',

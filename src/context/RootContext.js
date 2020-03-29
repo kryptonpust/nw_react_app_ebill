@@ -3,8 +3,7 @@ import React from 'react';
 
 export default React.createContext({
     settings:{},
-    status:false,
-    openday: ()=>{},
-    closeday: ()=>{},
+    reload:false,
+    reloadSettings: ()=>{},
     updateSetting: (key,val) =>{}
 })

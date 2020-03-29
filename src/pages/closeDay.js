@@ -3,7 +3,8 @@ import React, { useContext, useState } from 'react';
 
 import RootContext from '../context/RootContext';
 
-const fs =window.nw.require('fs');
+const fs = window.nw.require('fs');
+const sqlite3 = window.nw.require('sqlite3').verbose();
 
 export default function CloseDay() {
     const [show, setShow] = useState(false);
@@ -52,30 +53,48 @@ export default function CloseDay() {
                     setData(event.target.value)
                 }}
                 placeholder={`${context.settings.gtotal}`}
-                inputProps={{ style: { textAlign: 'center' }}}
+                inputProps={{ style: { textAlign: 'center' } }}
                 InputProps={{
-                    style: { color: 'red',fontSize: '2rem' },
-                    
+                    style: { color: 'red', fontSize: '2rem' },
+
                 }}
             />
             {<Button className={classes.btn} variant="contained"
                 disabled={parseFloat(context.settings.gtotal) !== parseFloat(data)}
                 onClick={async () => {
                     setShow(true)
-                    window.db.close()
                     if (!fs.existsSync('./backup')) {
                         fs.mkdirSync('./backup')
                     }
-                    const filename = Buffer.from(context.settings.date).toString('base64');
-                    fs.copyFile('./database.sqlite', `./backup/${filename}.sqlite`, (err) => {
-                        if (err) throw err;
-                        console.log('source.txt was copied to destination.txt');
-                        fs.unlink('./database.sqlite', (err) => {
+                    if (context.reload) {
+                        window.db.close()
+                        window.nw.Window.get().reload()
+
+                    } else {
+                        window.db.close()
+                        const filename = Buffer.from(context.settings.date).toString('base64');
+                        fs.copyFile('./database.sqlite', `./backup/${filename}.sqlite`, (err) => {
                             if (err) throw err;
-                            console.log('path/file.txt was deleted');
-                            window.nw.Window.get().reload()
-                          });
-                    });
+                            console.log('source.db was copied to destination.db');
+
+                            const db = new sqlite3.Database('./database.sqlite', (err) => {
+                                if (err) {
+                                    console.error(err.message);
+                                }
+                                console.log('Connected to the database.');
+                                db.serialize(() => {
+                                    db.run(`UPDATE settings SET val=? WHERE name=?`, [null, 'date'])
+                                        .run(`DELETE FROM tmp`, (err, row) => {
+                                            window.nw.Window.get().reload()
+
+                                        })
+                                })
+                            });
+
+
+                        });
+                    }
+
                 }}
                 size="large"
             >Close This Day</Button>}

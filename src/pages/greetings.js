@@ -60,7 +60,7 @@ export default function Greetings() {
             justifyContent: 'center',
             alignContent: 'center',
             // flexGrow: 1,
-            marginBottom: '10rem',
+            marginBottom: '1rem',
             "& > div":
             {
                 display: 'flex',
@@ -109,37 +109,16 @@ export default function Greetings() {
 
             <div className={classes.info} style={{ left: 0, bottom: 0 }}>
                 <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-                    INSPIRED BY
+                    CONCEPT &amp; DESIGNED BY
                 </div>
                 <div style={{ color: 'red', fontSize: '1.2rem' }}>
                     Md. Maidul islam (Mahid)
-                    
-                    
                 </div>
                 <div>
                     2nd Officer
                 </div>
                 <div>
-                RAKUB, Mollaparahat br.
-                </div>
-                <br></br>
-                <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-                    INSPIRED BY
-                </div>
-                <div style={{ color: 'red', fontSize: '1.2rem' }}>
-                    Md. Sarwar Hossain
-                </div>
-                <div>
-                    Assistant Professor
-                </div>
-                <div>
-                    Dept of
-                </div>
-                <div>
-                    Information and Communication Engineering(ICE)
-                </div>
-                <div>
-                    Pabna University of Science and Technology(PUST)
+                    RAKUB, Mollaparahat br.
                 </div>
 
             </div>
@@ -152,7 +131,15 @@ export default function Greetings() {
                         NAFIUL RONY
                 </div>
                     <div>Email: nafiul.ice.pust@gmail.com</div>
+                    <div>
+                        Information and Communication Engineering(ICE)
                 </div>
+                    <div>
+                        Pabna University of Science and Technology(PUST)
+                </div>
+                </div>
+
+
             </div>
         </div>)
 }

@@ -4,7 +4,6 @@ import 'react-notifications/lib/notifications.css';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useContext, useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { Link, MemoryRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
@@ -12,6 +11,8 @@ import RootContext from './context/RootContext';
 import DetailsView, { Field } from './DetailView';
 import logo from './images/logo.svg';
 import mountain from './images/mountain.png';
+import windmill from './images/windmill.gif';
+
 import stars from './images/stars.png';
 import tree from './images/tree.png';
 import CloseDay from './pages/closeDay';
@@ -20,6 +21,7 @@ import FreshDay from './pages/home/FreshDay';
 import View from './pages/records';
 import Settings from './Settings';
 import { FormatDate } from './utils';
+import DayOpen from './pages/dayopen';
 
 // import styles from './App.module.css';
 
@@ -135,7 +137,7 @@ function Menu() {
     <div className={classes.menus}>
       <Button to="/home" component={Link} variant="contained" color="primary">Home</Button>
       {/* {!context.status && <Link to="/settings">Settings</Link>} */}
-      <Button to="/settings" component={Link} variant="contained" color="primary">Settings</Button>
+      {context.settings.date && <Button to="/settings" component={Link} variant="contained" color="primary">Settings</Button>}
       {context.settings.date && <Button to="/view" component={Link} variant="contained" color="primary">View</Button>}
       <Button to="/records" component={Link} variant="contained" color="primary">Records</Button>
       {context.settings.date && <Button to="/close" component={Link} variant="contained" className={classes.closebtn}>Close Day</Button>}
@@ -147,58 +149,15 @@ function Menu() {
 
 
 
-function Base() {
-  const classes = makeStyles(theme => ({
-    root: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'column',
-      minHeight: '50vh',
-      // backgroundColor: 'red'
-      "& > *":
-      {
-        margin: "10px"
-      }
-    }
-  }))()
-
-  const [date, setDate] = useState(new Date());
-  const context = useContext(RootContext)
-  return (
-    <div className={classes.root}>
-      <Calendar
-        value={date} />
-      <Button variant="outlined" color="secondary"
-        onClick={() => {
-          const val = date.toLocaleDateString();
-          window.db.run(`UPDATE settings SET val=? WHERE name=?`, [val, 'date'], (err) => {
-            if (err) {
-              NotificationManager.error('Failed!', 'Failed to UPDATE Data')
-              throw err;
-            }
-            NotificationManager.success('Update Successful')
-            if (context.settings) {
-              context.updateSetting('date', val)
-            }
-          })
-        }}
-      >Open A new Day</Button>
-    </div>
-  )
-}
 
 
 
 function App() {
-  const [status, setStatus] = useState(false);
+  const [reload, setReload] = useState(null);
   const [settings, setSettings] = useState({});
 
-  const openday = () => {
-    setStatus(true);
-  }
-  const closeday = () => {
-    setStatus(false)
+  const reloadSettings = () => {
+    setReload(true);
   }
 
   const updateSetting = (key, val, update = true) => {
@@ -226,7 +185,7 @@ function App() {
       })
     }
     getdata()
-  }, [])
+  }, [reload])
 
   const classes = makeStyles(theme => ({
     root: {
@@ -286,7 +245,7 @@ function App() {
           <Greetings />
         </Route>
         <RootContext.Provider
-          value={{ settings: settings, status: status, openday: openday, closeday: closeday, updateSetting: updateSetting }}
+          value={{ settings: settings, reload: reload, reloadSettings: reloadSettings, updateSetting: updateSetting }}
         >
           <div className={classes.root}>
             <div className={classes.fixed}>
@@ -295,54 +254,16 @@ function App() {
 
             </div>
             <div className={classes.decoration}>
-            <img src={mountain} alt="Logo" style={{
+            <img src={windmill} alt="Logo" style={{
               position: 'fixed',
-              height: '100px',
-              width: '100px',
               bottom: 0,
               zIndex: -100,
             }} />
-            <img src={tree} alt="Logo" style={{
+            <img src={windmill} alt="Logo" style={{
               position: 'fixed',
-              height: '100px',
-              width: '140px',
-              left: 86,
-              bottom: 0,
-              zIndex: -100,
-              "@media print": {
-                display: 'none',
-              }
-            }} />
-            <img src={tree} alt="Logo" style={{
-              position: 'fixed',
-              height: '100px',
-              width: '140px',
-              left: 200,
-              bottom: 0,
-              zIndex: -100
-            }} />
-            <img src={tree} alt="Logo" style={{
-              position: 'fixed',
-              height: '100px',
-              width: '140px',
               bottom: 0,
               right: 0,
-              zIndex: -100
-            }} />
-            <img src={tree} alt="Logo" style={{
-              position: 'fixed',
-              height: '100px',
-              width: '140px',
-              bottom: 0,
-              right: 120,
-              zIndex: -100
-            }} />
-            <img src={stars} alt="Logo" style={{
-              position: 'fixed',
-              height: '500px',
-              bottom: 30,
-              left: 10,
-              zIndex: -100
+              zIndex: -100,
             }} />
             </div>
             <div className={classes.content}>
@@ -353,7 +274,7 @@ function App() {
               {/* // </div> */}
 
               <Route path="/home">
-                {!settings.date && <Base />}
+                {!settings.date && <DayOpen />}
                 {settings.date && <FreshDay />}
               </Route>
               {!settings.date && <Redirect to="/home" />}

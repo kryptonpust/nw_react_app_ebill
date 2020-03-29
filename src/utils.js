@@ -16,7 +16,8 @@ export function FormatDate(val,num='d/m/y')
             return 'undefined'
     }
 }
-export const calculatevat = (amount, meter_charge=0,vat, precision) => {
+export const calculatevat = (amount, vat ,meter_charge, precision) => {
+  console.log(amount, meter_charge,vat, precision)
   if (!isNaN(amount) && !isNaN(vat) && !isNaN(precision)) {
     return Math.ceil(parseFloat(((parseFloat(amount) - parseFloat(meter_charge)) * (parseFloat(vat) * (1 / (100 + parseFloat(vat))))).toFixed(precision)))
   }

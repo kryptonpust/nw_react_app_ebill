@@ -32,7 +32,7 @@ export default function CustomTable(props) {
             ),
         }}
         columns={[
-            { title: "SL", field: "id", type: "numeric", filterPlaceholder: "Search", defaultSort: "desc" },
+            { title: "SL", field: "id", type: "numeric", filterPlaceholder: "Search", defaultSort: "desc",editable: 'never' },
             { title: "Meter NO", field: "meter_no", type: "numeric", filterPlaceholder: "Search" },
             {
                 title: "Bill Amount", field: "amount", type: "numeric", filtering: false,
@@ -48,7 +48,7 @@ export default function CustomTable(props) {
                         onChange={e => {
                             let temp = props.rowData
                             temp.amount = e.target.value
-                            temp.vat = calculatevat(parseFloat(temp.amount), parseFloat(context.settings.vat_percent), parseFloat(context.settings.precision_calculate))
+                            temp.vat = calculatevat(parseFloat(temp.amount), parseFloat(context.settings.vat_percent),parseFloat(context.settings.meter_charge), parseFloat(context.settings.precision_calculate))
                             temp.rev = calculaterev(parseFloat(temp.amount), parseFloat(context.settings.revenue_threshold), parseFloat(context.settings.revenue_amount), parseFloat(context.settings.precision_calculate))
                             props.onRowDataChange(temp);
                         }}

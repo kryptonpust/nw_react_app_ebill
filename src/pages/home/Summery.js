@@ -58,8 +58,8 @@ export default function Summery(props) {
                     <td>{props.summery.vat ? props.summery.vat : '0'}</td>
                 </tr> */}
                 <tr>
-                    <td>Grand Total:</td>
-                    <td>TK.{(props.summery.amount) ? parseFloat(props.summery.amount).toFixed(props.precision ? parseFloat(props.precision) : 0) : '0'} /-</td>
+                    <td style={{fontWeight: 'bold'}}>Grand Total:</td>
+                    <td style={{color: 'rgb(255,0,0)'}}>TK.{(props.summery.amount) ? parseFloat(props.summery.amount).toFixed(props.precision ? parseFloat(props.precision) : 0) : '0'} /-</td>
                     {/* <td>{props.summery.rev ? props.summery.rev : '0'}</td> */}
                 </tr>
             </tbody>

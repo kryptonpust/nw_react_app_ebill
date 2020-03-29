@@ -95,11 +95,14 @@ const RadioField = (props) => {
         radios:
         {
             display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center'
+            // flexWrap: 'wrap',
+            // justifyContent: 'center',
+            maxWidth: '50vh',
+            overflowX: 'auto'
+
         },
         header: {
-            minWidth: '30vw',
+            minWidth: '15vw',
             fontWeight: 'bold'
         }
     }))();
@@ -179,7 +182,7 @@ const SwitchField = (props) => {
             // },
         },
         header: {
-            minWidth: '30vw',
+            minWidth: '15vw',
             fontWeight: 'bold'
         },
     }))();
