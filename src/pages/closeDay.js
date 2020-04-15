@@ -85,8 +85,8 @@ export default function CloseDay() {
                                 db.serialize(() => {
                                     db.run(`UPDATE settings SET val=? WHERE name=?`, [null, 'date'])
                                         .run(`DELETE FROM tmp`, (err, row) => {
-                                            window.nw.Window.get().reload()
-
+                                            // window.nw.Window.get().reload()
+                                            console.log("Db cleaned up")
                                         })
                                 })
                             });

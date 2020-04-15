@@ -13,10 +13,8 @@ export default function CustomTable(props) {
     const context = useContext(RootContext)
     const [len, setLen] = React.useState(0);
     React.useEffect(() => {
-        console.log('reinitializing',props.len)
         setLen(props.len ? parseFloat(props.len) : 0)
-        if(props.tableRef)
-        {
+        if (props.tableRef) {
             props.tableRef.current.onQueryChange();
         }
     }, [props.len, props.tableRef])
@@ -32,8 +30,8 @@ export default function CustomTable(props) {
             ),
         }}
         columns={[
-            { title: "SL", field: "id", type: "numeric", filterPlaceholder: "Search", defaultSort: "desc",editable: 'never' },
-            { title: "Meter NO", field: "meter_no", type: "numeric", filterPlaceholder: "Search" },
+            { title: "SL", field: "id", type: "numeric", filterPlaceholder: "Search(sl)", defaultSort: "desc", editable: 'never' },
+            { title: "Meter NO", field: "meter_no", type: "numeric", filterPlaceholder: "Search(meter no)" },
             {
                 title: "Bill Amount", field: "amount", type: "numeric", filtering: false,
                 // currencySetting:{ currencyCode: '', minimumFractionDigits: 4, maximumFractionDigits: 5},
@@ -48,7 +46,7 @@ export default function CustomTable(props) {
                         onChange={e => {
                             let temp = props.rowData
                             temp.amount = e.target.value
-                            temp.vat = calculatevat(parseFloat(temp.amount), parseFloat(context.settings.vat_percent),parseFloat(context.settings.meter_charge), parseFloat(context.settings.precision_calculate))
+                            temp.vat = calculatevat(parseFloat(temp.amount), parseFloat(context.settings.vat_percent), parseFloat(context.settings.meter_charge), parseFloat(context.settings.precision_calculate))
                             temp.rev = calculaterev(parseFloat(temp.amount), parseFloat(context.settings.revenue_threshold), parseFloat(context.settings.revenue_amount), parseFloat(context.settings.precision_calculate))
                             props.onRowDataChange(temp);
                         }}
@@ -194,6 +192,17 @@ export default function CustomTable(props) {
                         }, 500)
                     })
                 }),
+        }}
+
+
+        localization={{ 
+            body: 
+            { 
+                editRow: 
+                { 
+                    deleteText: 'Do you want to delete this row?' 
+                } 
+            } 
         }}
     />)
 }

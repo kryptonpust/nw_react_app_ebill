@@ -2,3 +2,5 @@ node_modules
 build
 backup
 database.sqlite
+package-lock.json
+.vscode

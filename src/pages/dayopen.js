@@ -3,6 +3,7 @@ import { makeStyles, Button } from '@material-ui/core';
 import RootContext from '../context/RootContext';
 import Calendar from 'react-calendar';
 import { NotificationManager } from 'react-notifications';
+import 'react-calendar/dist/Calendar.css'
 const fs = window.nw.require('fs');
 const sqlite3 = window.nw.require('sqlite3').verbose();
 

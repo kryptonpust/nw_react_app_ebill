@@ -46,7 +46,7 @@ const Field = (props) => {
     }))();
     return (
         <div className={classes.field}>
-            <TextField className={classes.edit} value={data} label={props.data.name && props.data.name.replace(/_/g, ' ').toUpperCase()}
+            <TextField className={classes.edit} value={data} label={props.data.title ? props.data.title : props.data.name.replace(/_/g, ' ').toUpperCase()}
                 InputLabelProps={{ shrink: true, style: { color: 'red' } }}
                 onChange={event => {
                     setData(event.target.value);
@@ -267,7 +267,7 @@ function FieldRevenue(props) {
         }
     }))()
     return (<div className={classes.root}>
-        <p>Revenue</p>
+        <p style={{ color: 'red' }}>Revenue</p>
         <div className={classes.content}>
             <h4>Bill Amount ></h4>
             <TextField className={classes.fixedwidth} variant="outlined" type="number" label="value" value={data1}
@@ -334,6 +334,9 @@ export default function SimpleTabs() {
             fontWeight: 'bolder',
             color: '#119a11'
         },
+        excontent: {
+            display: 'flex', justifyContent: 'center', flexDirection: 'column', flexWrap: 'wrap'
+        }
     }))();
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -344,19 +347,14 @@ export default function SimpleTabs() {
             <Paper>
                 <AppBar position="static">
                     <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-                        <Tab label="Vat/Revenue" {...a11yProps(0)} />
+                        <Tab label="General" {...a11yProps(0)} />
                         <Tab label="View" {...a11yProps(1)} />
                         <Tab label="Branding" {...a11yProps(2)} />
                         <Tab label="Printing Settings" {...a11yProps(3)} />
                     </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
-                    <FieldRevenue
-                        data1={{ name: 'revenue_threshold', val: context.settings['revenue_threshold'] }}
-                        data2={{ name: 'revenue_amount', val: context.settings['revenue_amount'] }}
-                        onChange={(key, val, update = true) => {
-                            context.updateSetting(key, val, update);
-                        }} />
+
 
                     <Field data={{ name: 'ac_no', val: context.settings['ac_no'] }} update={(key, val) => {
                         context.updateSetting(key, val);
@@ -364,9 +362,7 @@ export default function SimpleTabs() {
                     <Field data={{ name: 'vat_account', val: context.settings['vat_account'] }} update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
-                    <Field data={{ name: 'table_row_number', val: context.settings['table_row_number'] }} update={(key, val) => {
-                        context.updateSetting(key, val);
-                    }} />
+
                     <ExpansionPanel>
                         <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
@@ -375,13 +371,21 @@ export default function SimpleTabs() {
                         >
                             <Typography className={classes.heading}>Advanced Settings</Typography>
                         </ExpansionPanelSummary>
-                        <ExpansionPanelSummary style={{display: 'flex',justifyContent: 'center',flexDirection: 'column'}}>
+                        <ExpansionPanelSummary classes={{
+                            content: classes.excontent
+                        }}>
                             <Field data={{ name: 'vat_percent', val: context.settings['vat_percent'] }} update={(key, val) => {
                                 context.updateSetting(key, val);
                             }} />
                             <Field data={{ name: 'meter_charge', val: context.settings['meter_charge'] }} update={(key, val) => {
                                 context.updateSetting(key, val);
                             }} />
+                            <FieldRevenue
+                                data1={{ name: 'revenue_threshold', val: context.settings['revenue_threshold'] }}
+                                data2={{ name: 'revenue_amount', val: context.settings['revenue_amount'] }}
+                                onChange={(key, val, update = true) => {
+                                    context.updateSetting(key, val, update);
+                                }} />
                         </ExpansionPanelSummary>
                     </ExpansionPanel>
                 </TabPanel>
@@ -393,30 +397,33 @@ export default function SimpleTabs() {
                     <RadioField data={{ name: 'precision_calculate', val: context.settings['precision_calculate'] }} options={['0', '2', '3']} onChange={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
-                    <SwitchField data={{ name: 'date_format', val: context.settings['date_format'] }} options={['d/m/y', 'd-m-y', 'd M y']} onChange={(key, val) => {
+                    <SwitchField data={{ name: 'date_format', val: context.settings['date_format'] }} options={['d/m/y', 'd-m-y', 'd M y', 'd/M/y']} onChange={(key, val) => {
+                        context.updateSetting(key, val);
+                    }} />
+                    <Field data={{ name: 'table_row_number', val: context.settings['table_row_number'] }} update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <Field data={{ name: 'title', val: context.settings['title'] }} update={(key, val) => {
+                    <Field data={{ name: 'title', title: 'Institute/Organization Name', val: context.settings['title'] }} update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
-                    <Field data={{ name: 'sub_title', val: context.settings['sub_title'] }} update={(key, val) => {
+                    <Field data={{ name: 'sub_title', title: 'Branch Name', val: context.settings['sub_title'] }} update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
-                    <Field data={{ name: 'bill_title', val: context.settings['bill_title'] }} update={(key, val) => {
+                    {/* <Field data={{ name: 'bill_title', val: context.settings['bill_title'] }} update={(key, val) => {
+                        context.updateSetting(key, val);
+                    }} /> */}
+                    <Field data={{ name: 'bill_end_title', title: 'Top Sheet Description', val: context.settings['bill_end_title'] }} update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
-                    <Field data={{ name: 'bill_end_title', val: context.settings['bill_end_title'] }} update={(key, val) => {
+                    <Field data={{ name: 'user_name', title: 'Responsible Name', val: context.settings['user_name'] }} update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
-                    <Field data={{ name: 'user_name', val: context.settings['user_name'] }} update={(key, val) => {
+                    <Field data={{ name: 'user_designation', title: 'Designation', val: context.settings['user_designation'] }} update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
-                    <Field data={{ name: 'user_designation', val: context.settings['user_designation'] }} update={(key, val) => {
-                        context.updateSetting(key, val);
-                    }} />
-                    <Field data={{ name: 'user_address', val: context.settings['user_address'] }} update={(key, val) => {
+                    <Field data={{ name: 'user_address', title: 'Full Address', val: context.settings['user_address'] }} update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
                 </TabPanel>
@@ -425,7 +432,7 @@ export default function SimpleTabs() {
                     <RadioField data={{ name: 'paper_type', val: context.settings['paper_type'] }} options={['A4', 'Legal']} onChange={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
-                    <RadioField data={{ name: 'table_per_page', val: context.settings['table_per_page'] }} options={['3', '4']} onChange={(key, val) => {
+                    <RadioField data={{ name: 'table_per_page', val: context.settings['table_per_page'] }} options={['1', '2', '3', '4']} onChange={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
                     {context.settings['paper_type'] === 'A4' && <RadioField data={{ name: 'row_per_table', val: context.settings['row_per_table'] }} options={['40', '45', '50', '55']} onChange={(key, val) => {

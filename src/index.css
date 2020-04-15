@@ -9,3 +9,27 @@ body {
   background-image: url('./images/art.png');
 
 }
+
+.react-calendar__navigation{
+  background-color: green;
+}
+
+.react-calendar__navigation button{
+  color: white;
+  font-size: 1.5rem;
+}
+
+@font-face{
+  font-family: 'BookAntiqua';
+  src: url('./fonts/bookantiqua.ttf');
+}
+
+@font-face{
+  font-family: 'CalibriRegular';
+  src: url('./fonts/CalibriRegular.ttf');
+}
+
+@font-face{
+  font-family: 'arial';
+  src: url('./fonts/bookantiqua.ttf');
+}

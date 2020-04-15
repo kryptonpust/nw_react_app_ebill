@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import RootContext from "../../context/RootContext";
-import { makeStyles, Paper } from "@material-ui/core";
-
+import { makeStyles, Paper, IconButton } from "@material-ui/core";
+import FileCopyTwoToneIcon from '@material-ui/icons/FileCopyTwoTone';
+import { NotificationManager } from 'react-notifications';
 
 export default function Summery(props) {
 
@@ -58,9 +59,26 @@ export default function Summery(props) {
                     <td>{props.summery.vat ? props.summery.vat : '0'}</td>
                 </tr> */}
                 <tr>
-                    <td style={{fontWeight: 'bold'}}>Grand Total:</td>
-                    <td style={{color: 'rgb(255,0,0)'}}>TK.{(props.summery.amount) ? parseFloat(props.summery.amount).toFixed(props.precision ? parseFloat(props.precision) : 0) : '0'} /-</td>
+                    <td style={{ fontWeight: 'bold', fontFamily: 'arial' }}>Grand Total:</td>
+                    <td style={{ color: 'cornflowerblue',fontWeight: 'bold' }}>TK.<span style={{color: 'red'}}>{(props.summery.amount) ? parseFloat(props.summery.amount).toFixed(props.precision ? parseFloat(props.precision) : 0) : '0'}</span> /-</td>
                     {/* <td>{props.summery.rev ? props.summery.rev : '0'}</td> */}
+                    <td>
+                        <IconButton color="primary" aria-label="Copy" onClick={() => {
+                            var clipboard = window.nw.Clipboard.get()
+                            clipboard.set(
+                                (props.summery.amount) ?
+                                    parseFloat(props.summery.amount).toFixed(props.precision ?
+                                        parseFloat(props.precision) :
+                                        0
+                                    ) :
+                                    '0',
+                                'text');
+                            NotificationManager.success('Grand Total Copied', 'Successful')
+                            console.log('clicked');
+                        }}>
+                            <FileCopyTwoToneIcon />
+                        </IconButton>
+                    </td>
                 </tr>
             </tbody>
         </table>

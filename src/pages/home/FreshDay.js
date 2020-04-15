@@ -31,6 +31,7 @@ export default function FreshDay() {
   const billRef = useRef();
   const vatRef = useRef();
   const revRef = useRef();
+  const pushRef = useRef();
 
   const context = useContext(RootContext);
   useEffect(() => {
@@ -61,8 +62,45 @@ export default function FreshDay() {
     }
   }, [enablesl])
 
+  const editShortcut = new window.nw.Shortcut({ key: "Ctrl+E" })
+  const pushShortcut = new window.nw.Shortcut({ key: "Ctrl+space" })
 
 
+  useEffect(() => {
+    window.nw.App.registerGlobalHotKey(editShortcut);
+    console.log('Edit Hot key registered')
+
+    window.nw.App.registerGlobalHotKey(pushShortcut);
+    console.log('Push Hot key registered')
+
+
+    editShortcut.on('active', function () {
+      setEnableSl(old => !old)
+      if(slRef)
+      {
+        slRef.current.focus()
+      }
+    });
+
+    editShortcut.on('failed', function (msg) {
+      console.log(msg);
+    });
+
+    pushShortcut.on('active', function () {
+      if (pushRef) {
+        pushRef.current.activeLock()
+      }
+    });
+
+    pushShortcut.on('failed', function (msg) {
+      console.log(msg);
+    });
+    return function cleanup() {
+      window.nw.App.unregisterGlobalHotKey(editShortcut);
+      window.nw.App.unregisterGlobalHotKey(pushShortcut);
+
+    }
+  }, [editShortcut, pushShortcut])
 
   const classes = makeStyles(theme => ({
     root: {
@@ -130,8 +168,6 @@ export default function FreshDay() {
   }))();
   return (
     <div className={classes.root}>
-
-
       <Paper className={classes.input} elevation={3}>
         <h2 style={{ textDecoration: 'underline' }}>Electricity Bill Input</h2>
         <Summery summery={summery} precision={context.settings.precision_calculate} />
@@ -156,7 +192,7 @@ export default function FreshDay() {
             id="sl"
             type="number"
             variant="outlined"
-            style={{ width: '5rem' }}
+            style={{ width: '8rem' }}
             inputRef={slRef}
             inputProps={{ min: 0 }}
             disabled={!enablesl}
@@ -270,7 +306,7 @@ export default function FreshDay() {
                 setInputs(old => ({
                   ...old,
                   bill: val,
-                  vat: pushed ? '0' : `${calculatevat(parseFloat(val), parseFloat(context.settings.vat_percent),parseFloat(context.settings.meter_charge), parseFloat(context.settings.precision_calculate))}`,
+                  vat: pushed ? '0' : `${calculatevat(parseFloat(val), parseFloat(context.settings.vat_percent), parseFloat(context.settings.meter_charge), parseFloat(context.settings.precision_calculate))}`,
                   rev: `${calculaterev(parseFloat(val), parseFloat(context.settings.revenue_threshold), parseFloat(context.settings.revenue_amount), parseFloat(context.settings.precision_calculate))}`
                 }))
               }
@@ -299,6 +335,7 @@ export default function FreshDay() {
                       })
                     } else {
                       const updated = inputs.bill - inputs.vat;
+                      console.log(inputs)
                       window.db.run(`INSERT INTO tmp(meter_no,amount,vamount,vat,rev) VALUES (?,?,?,?,?)`, [inputs.meter, inputs.bill, updated, inputs.vat, inputs.rev], (err) => {
                         if (err) {
                           console.log(err)
@@ -324,6 +361,10 @@ export default function FreshDay() {
                   }
                 }
               } else if (event.key === ' ') {
+                if(pushRef)
+                {
+                  pushRef.current.animate()
+                }
                 setInputs(old => ({ ...old, vat: 0 }))
                 setTimeout(() => {
                   vatRef.current.select()
@@ -364,7 +405,7 @@ export default function FreshDay() {
                         NotificationManager.error('Failed!', 'Failed to Insert Data')
                         throw err;
                       }
-                      NotificationManager.success('Insert Successful')
+                      NotificationManager.success('Update Successful')
                       if (tableEl.current) {
                         tableEl.current.onQueryChange();
                       }
@@ -396,6 +437,10 @@ export default function FreshDay() {
                   }
                 }
               } else if (event.key === ' ') {
+                if(pushRef)
+                {
+                  pushRef.current.animate()
+                }
                 setInputs(old => ({ ...old, vat: 0 }))
                 setTimeout(() => {
                   vatRef.current.select()
@@ -424,13 +469,15 @@ export default function FreshDay() {
 
             value={inputs.rev}
           />
-          <PushButton onLongClick={() => {
-            setPushed(true)
-            setInputs(old => ({ ...old, vat: 0 }))
-            setTimeout(() => {
-              vatRef.current.select()
-            }, 100)
-          }}
+          <PushButton
+            ref={pushRef}
+            onLongClick={() => {
+              setPushed(old => !old)
+              setInputs(old => ({ ...old, vat: 0 }))
+              setTimeout(() => {
+                vatRef.current.select()
+              }, 100)
+            }}
             singleClick={() => {
               if (pushed) {
                 setPushed(false)

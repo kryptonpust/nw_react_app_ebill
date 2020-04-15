@@ -1,4 +1,3 @@
-import 'react-calendar/dist/Calendar.css';
 import 'react-notifications/lib/notifications.css';
 
 import { Button } from '@material-ui/core';
@@ -9,12 +8,10 @@ import { Link, MemoryRouter as Router, Redirect, Route, Switch } from 'react-rou
 
 import RootContext from './context/RootContext';
 import DetailsView, { Field } from './DetailView';
+
 import logo from './images/logo.svg';
-import mountain from './images/mountain.png';
 import windmill from './images/windmill.gif';
 
-import stars from './images/stars.png';
-import tree from './images/tree.png';
 import CloseDay from './pages/closeDay';
 import Greetings from './pages/greetings';
 import FreshDay from './pages/home/FreshDay';
@@ -65,10 +62,13 @@ function Header() {
     {
       fontSize: '2rem',
       fontWeight: 'bold',
+      fontFamily: 'BookAntiqua'
     },
     sub_title: {
       fontSize: '1.2rem',
       fontWeight: 'bold',
+      fontFamily: 'CalibriRegular'
+
     }
   }))();
 

@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './fonts/bookantiqua.ttf'
+import './fonts/CalibriRegular.ttf'
+import './fonts/arial.ttf'
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -28,10 +31,10 @@ if (!fs.existsSync('./database.sqlite')) {
         { name: 'precision_calculate', val: '2' },
         { name: 'date_format', val: 'd M y' },
         { name: 'bill_title', val: 'Daily Electricity Bill Register' },
-        { name: 'bill_end_title', val: 'Following Amount Money is reserved ....' },
-        { name: 'user_name', val: '(Mizanur Rahman)' },
-        { name: 'user_designation', val: 'Officer' },
-        { name: 'user_address', val: 'Rakab, Mollaparahat, Rajshahi' },
+        { name: 'bill_end_title', val: 'Following Amount is received by' },
+        { name: 'user_name', val: 'Md. Mizanur Rahman' },
+        { name: 'user_designation', val: '(Officer)' },
+        { name: 'user_address', val: 'RAKUB, Mollaparahat Branch, Rajshahi' },
         { name: 'ac_no', val: 'CD-47' },
         { name: 'vat_account', val: '41/10B' },
         { name: 'table_row_number', val: '3' },
@@ -46,7 +49,7 @@ if (!fs.existsSync('./database.sqlite')) {
     window.db.serialize(() => {
         window.db.run(`CREATE TABLE "tmp" (
         "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-        "meter_no"	INTEGER NOT NULL,
+        "meter_no"	TEXT NOT NULL,
         "amount"	REAL NOT NULL,
         "vamount"	REAL NOT NULL,
         "vat"	REAL NOT NULL,

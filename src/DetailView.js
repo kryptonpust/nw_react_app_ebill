@@ -192,6 +192,8 @@ export default function DetailsView(props) {
                     }
                     db.close();
                     setData(row)
+                    setIsLoading(false)
+
                 })
             } else {
                 window.db.all(`SELECT * from tmp`, (err, row) => {
@@ -202,6 +204,8 @@ export default function DetailsView(props) {
                     // NotificationManager.info('Query Successful')
                     // setData(gendata(2200))
                     setData(row)
+                    setIsLoading(false)
+
                 })
             }
         }
@@ -214,7 +218,7 @@ export default function DetailsView(props) {
 
     useEffect(() => {
         window.nw.App.registerGlobalHotKey(shortcut);
-        console.log('Hot key registered')
+        console.log('Printing Hot key registered')
         shortcut.on('active', function () {
             const win = window.nw.Window.get();
             win.print({ "autoprint": "false", "headerFooterEnabled": "false", "marginsType": 2 })
@@ -229,12 +233,11 @@ export default function DetailsView(props) {
     }, [shortcut])
     const pagedata = React.useMemo(() => {
         const val = getpages(data, settings.row_per_table, settings.table_per_page)
-        setIsLoading(false)
         return val;
 
     }, [data, settings.row_per_table, settings.table_per_page])
 
-
+    console.log("Is loading value", isLoaing)
     if (isLoaing) {
         return (<Backdrop className={classes.backdrop} open={isLoaing}>
             <CircularProgress color="inherit" />
@@ -267,8 +270,8 @@ export default function DetailsView(props) {
                                 <div className={classes.logos}>
                                     <img src={logo} alt="Logo" />
                                     <div className={classes.titles}>
-                                        <div style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>{settings.title ? settings.title : 'undefined'}</div>
-                                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{settings.sub_title ? settings.sub_title : 'undefined'}</div>
+                                        <div style={{ fontSize: '1.6rem', fontWeight: 'bold', fontFamily: 'BookAntiqua' }}>{settings.title ? settings.title : 'undefined'}</div>
+                                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', fontFamily: 'CalibriRegular' }}>{settings.sub_title ? settings.sub_title : 'undefined'}</div>
                                     </div>
                                 </div>
                                 <div style={{ position: 'absolute', left: '5px', display: 'flex' }}>
@@ -340,7 +343,7 @@ function CustomTable(props) {
             </tbody>
             <tfoot>
                 <tr>
-                    <td colSpan="2"></td>
+                    <td colSpan="2">Bundle Total</td>
                     <td>{props.sum.samount}</td>
                     <td>{props.sum.svat}</td>
                     <td>{props.sum.srev}</td>
@@ -369,7 +372,9 @@ function TopSheet(props) {
         date:
         {
             display: 'flex',
-            justifyContent: 'flex-end'
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative'
         },
         sum: {
             display: 'flex',
@@ -395,7 +400,7 @@ function TopSheet(props) {
         },
         footer: {
             display: 'flex',
-            alignItems: 'flex-end',
+            alignItems: 'center',
             flexDirection: 'column',
             marginRight: '1rem'
 
@@ -405,7 +410,8 @@ function TopSheet(props) {
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-            marginRight: '2rem'
+            marginRight: '2rem',
+            alignSelf: 'flex-end'
         },
         logos: {
             display: 'flex',
@@ -431,26 +437,41 @@ function TopSheet(props) {
                 <div className={classes.logos}>
                     <img src={logo} alt="Logo" />
                     <div className={classes.titles}>
-                        <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>{props.settings.title ? props.settings.title : 'undefined'}</div>
-                        <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{props.settings.sub_title ? props.settings.sub_title : 'undefined'}</div>
+                        <div style={{ fontSize: '2rem', fontWeight: 'bold', fontFamily: 'BookAntiqua' }}>{props.settings.title ? props.settings.title : 'undefined'}</div>
+                        <div style={{ fontSize: '1.2rem', fontWeight: 'bold', fontFamily: 'CalibriRegular' }}>{props.settings.sub_title ? props.settings.sub_title : 'undefined'}</div>
                     </div>
                 </div>
 
                 <hr style={{ width: '100%', height: '2px', border: '0.1px black dotted', margin: 0 }} />
                 <div style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '5px' }}>{props.settings.bill_title ? props.settings.bill_title : 'undefined'}</div>
-                {props.summery &&
-                    <div style={{ fontSize: '1rem', fontWeight: 'bold', margin: '5px' }}>(TopSheet)</div>
-                }
+
             </div>
             <div className={classes.date}>
-                <Field title={"Date"} value={FormatDate(props.date, props.settings.date_format)} />
+                {props.summery &&
+                    <div style={{ fontSize: '1rem', fontWeight: 'bold', margin: '5px', padding: '10px', border: '1px solid', borderRadius: '5px' }}>Top Sheet</div>
+                }
+                <div style={{ position: 'absolute', right: '1%' }}>{FormatDate(props.date, props.settings.date_format)}</div>
             </div>
+
             {props.summery && <div className={classes.sum}>
                 <TwoRow title={"No of Bill"} value={props.summery.no_of_bill} />
-                <TwoRow title={"Bill Amount"} value={`Tk.${parseFloat(props.summery.vamount).toFixed(parseFloat(props.settings.precision_calculate))}/-`} titleValue={props.settings.ac_no} />
-                <TwoRow title={"VAT Amount"} value={`Tk.${parseFloat(props.summery.vat).toFixed(parseFloat(props.settings.precision_calculate))}/-`} titleValue={props.settings.vat_account} />
-                <TwoRow title={"G. Total"} value={`Tk.${parseFloat(props.summery.amount).toFixed(parseFloat(props.settings.precision_calculate))}/-`} />
-                <TwoRowTwoCol title1={"No of Rev."} value1={parseInt(props.summery.rev) / parseInt(props.settings.revenue_amount)} title2={"Revenue"} value2={props.summery.rev} />
+                {/* <TwoRow title={"Bill Amount"} value={`Tk.${parseFloat(props.summery.vamount).toFixed(parseFloat(props.settings.precision_calculate))}/-`} titleValue={props.settings.ac_no} />
+                <TwoRow title={"VAT Amount"} value={`Tk.${parseFloat(props.summery.vat).toFixed(parseFloat(props.settings.precision_calculate))}/-`} titleValue={props.settings.vat_account} /> */}
+                <TwoRowTwoCol
+                    title1={"Bill Amount"}
+                    titleValue1={props.settings.ac_no}
+                    title2={`Tk.${parseFloat(props.summery.vamount).toFixed(parseFloat(props.settings.precision_calculate))}/-`}
+                    value1={"VAT Amount"}
+                    titleValue2={props.settings.vat_account}
+                    value2={`Tk.${parseFloat(props.summery.vat).toFixed(parseFloat(props.settings.precision_calculate))}/-`}
+                />
+                <TwoRow title={"Grand Total"} value={`Tk.${parseFloat(props.summery.amount).toFixed(parseFloat(props.settings.precision_calculate))}/-`} />
+                <TwoRowTwoCol
+                    title1={"No of Revenue."}
+                    value1={parseInt(props.summery.rev) / parseInt(props.settings.revenue_amount)}
+                    title2={"Revenue"}
+                    value2={`Tk.${parseFloat(props.summery.rev).toFixed(parseFloat(props.settings.precision_calculate))}/-`}
+                />
             </div>}
             <table className={classes.table}>
                 <thead>
@@ -477,7 +498,7 @@ function TopSheet(props) {
                 </tbody>
             </table>
             {props.showFooter && <div className={classes.footer}>
-                <h5>{props.settings.bill_end_title ? props.settings.bill_end_title : 'undefined'}</h5>
+                <h4>{props.settings.bill_end_title ? props.settings.bill_end_title : 'undefined'}</h4>
                 <br></br>
                 <p className={classes.stamp}>
                     {props.settings.user_name ? props.settings.user_name : 'undefined'}
@@ -595,12 +616,12 @@ const TwoRowTwoCol = (props) => {
         <table className={classes.root}>
             <tbody>
                 <tr>
-                    <td >{props.title1}</td>
-                    <td >{props.value1}</td>
+                    <td >{props.title1} <br></br><strong>{props.titleValue1 ? props.titleValue1 : ''}</strong></td>
+                    <td >{props.value1} <br></br><strong>{props.titleValue2 ? props.titleValue2 : ''}</strong></td>
                 </tr>
                 <tr>
                     <td>{props.title2} </td>
-                    <td>Tk.{props.value2}/- </td>
+                    <td>{props.value2}</td>
                 </tr>
             </tbody>
         </table>)

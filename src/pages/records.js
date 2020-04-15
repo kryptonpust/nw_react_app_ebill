@@ -4,6 +4,9 @@ import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
 import DetailsView from '../DetailView';
 import { FormatDate } from '../utils';
 import RootContext from '../context/RootContext';
+const sqlite3 = window.nw.require('sqlite3').verbose();
+const createCsvWriter = window.nw.require('csv-writer').createObjectCsvWriter;
+
 
 const fs = window.nw.require('fs');
 export default function View() {
@@ -19,7 +22,7 @@ export default function View() {
                 const temp = Buffer.from(val.split('.')[0], 'base64').toString('ascii');
                 return temp;
             });
-            setBackups(res)
+            setBackups(res.sort((a, b) => new Date(b) - new Date(a)))
         }
         getdata()
     }, [])
@@ -119,5 +122,70 @@ const PreRecord = (props) => {
         <Button variant="contained" color="primary" size="small" onClick={() => {
             props.onChange(props.name);
         }}>Open</Button>
+        {/* <Button variant="contained" color="secondary" size="small"
+        onClick={() => {
+            const filename = Buffer.from(props.name).toString('base64');
+            const db = new sqlite3.Database(`./backup/${filename}.sqlite`, (err) => {
+                if (err) {
+                    console.error(err.message);
+                }
+                console.log('Connected to the database.');
+            });
+            db.all("SELECT * from tmp", (err, row) => {
+                if (err) {
+                    throw err;
+                }
+                var myCsv = "Col1,Col2,Col3\nval1,val2,val3";
+
+                window.open('data:text/csv;charset=utf-8,' + escape(myCsv));
+            })
+        }}
+        >Upload File
+        </Button> */}
+        <input
+            style={{ display: 'none' }}
+            id="raised-button-file"
+            type="file"
+            nwsaveas={`Ebill_${props.name.toString()}.csv`}
+            onChange={e => {
+                const savepath=e.target.value.toString()
+                if(savepath)
+                {
+                    const filename = Buffer.from(props.name).toString('base64');
+                    const db = new sqlite3.Database(`./backup/${filename}.sqlite`, (err) => {
+                        if (err) {
+                            console.error(err.message);
+                        }
+                        console.log('Connected to the database.');
+                    });
+                    db.all("SELECT id,meter_no,amount,vat,rev,date from tmp", (err, row) => {
+                        if (err) {
+                            throw err;
+                        }
+                        const csvWriter = createCsvWriter({
+                            path: savepath,
+                            header: [
+                                {id: 'id', title: 'id'},
+                                {id: 'meter_no', title: 'meter_no'},
+                                {id: 'amount', title: 'amount'},
+                                // {id: 'vamount', title: 'vamount'},
+                                {id: 'vat', title: 'vat'},
+                                {id: 'rev', title: 'rev'},
+                                {id: 'date', title: 'date'},
+                            ]
+                        });
+                        csvWriter.writeRecords(row)
+                        .then(()=>{
+                            console.log('Exported directory: ',savepath)
+                        })
+                    })
+                }
+            }}
+        />
+        <label htmlFor="raised-button-file">
+            <Button variant="contained" component="span" color="secondary" size="small">
+                Export
+            </Button>
+        </label>
     </Paper>)
 }

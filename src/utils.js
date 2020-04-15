@@ -1,5 +1,5 @@
 
-const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
+const month = ["Jan", "Feb", "March", "April", "May", "June", "July","Aug", "Sep", "Oct", "Nov", "Dec"];
 export function FormatDate(val,num='d/m/y')
 {
     console.log(typeof(val),num)
@@ -12,6 +12,8 @@ export function FormatDate(val,num='d/m/y')
           return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
           case 'd M y':
           return `${date.getDate()} ${month[date.getMonth()]} ${date.getFullYear()}`
+          case 'd/M/y':
+          return `${date.getDate()}/${month[date.getMonth()]}/${date.getFullYear()}`
         default:
             return 'undefined'
     }

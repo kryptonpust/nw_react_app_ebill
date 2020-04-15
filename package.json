@@ -8,7 +8,9 @@
   "dependencies": {
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
+    "csv-writer": "^1.6.0",
     "date-fns": "^2.11.0",
+    "export-to-csv": "^0.2.1",
     "material-table": "^1.57.2",
     "react": "^16.13.0",
     "react-calendar": "^3.0.0",
@@ -25,7 +27,7 @@
     "eject": "react-scripts eject",
     "dev": "NWJS_START_URL=http://localhost:3000 nw .",
     "preinstall": "npm uninstall sqlite3",
-    "postinstall": "npm install sqlite3 --build-from-source --runtime=node-webkit --target_arch=x64 --target=0.44.5"
+    "postinstall": "npm install sqlite3 --build-from-source --runtime=node-webkit --target_arch=x64 --target=0.44.3"
   },
   "eslintConfig": {
     "extends": "react-app"
