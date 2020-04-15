@@ -177,8 +177,9 @@ export default function DetailsView(props) {
 
     useEffect(() => {
         async function getdata() {
-            setSettings(context.settings)
             if (props.date) {
+            setSettings({...context.settings,date: props.date})
+
                 const filename = Buffer.from(props.date).toString('base64');
                 const db = new sqlite3.Database(`./backup/${filename}.sqlite`, (err) => {
                     if (err) {
@@ -193,9 +194,9 @@ export default function DetailsView(props) {
                     db.close();
                     setData(row)
                     setIsLoading(false)
-
                 })
             } else {
+                setSettings(context.settings)
                 window.db.all(`SELECT * from tmp`, (err, row) => {
                     if (err) {
                         NotificationManager.error('Failed!', 'Failed to retrive Table Data')
@@ -319,7 +320,7 @@ function CustomTable(props) {
         <table className={classes.root}>
             <thead className={classes.head}>
                 <tr>
-                    <th colSpan="5">Bandile No {props.bno ? props.bno : 'undefined'}</th>
+                    <th colSpan="5">Bundle No {props.bno ? props.bno : 'undefined'}</th>
                 </tr>
                 <tr>
                     <th >SL</th>
@@ -477,10 +478,10 @@ function TopSheet(props) {
                 <thead>
                     <tr>
                         <th>SL</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                        <th>Vat</th>
-                        <th>Rev.</th>
+                        <th>Particulars(Bill Bundle)</th>
+                        <th>Bill Amount</th>
+                        <th>Vat Amount</th>
+                        <th>Revenue</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -488,7 +489,7 @@ function TopSheet(props) {
                         return (
                             <tr key={idx}>
                                 <td>{val.id}</td>
-                                <td>Bandile No - {val.id}</td>
+                                <td>Bundle No - {val.id}</td>
                                 <td>{val.amount}</td>
                                 <td>{val.vat}</td>
                                 <td>{val.rev}</td>

@@ -8,16 +8,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 const sqlite3 = window.nw.require('sqlite3').verbose();
-const fs =  window.nw.require('fs')
+const fs = window.nw.require('fs')
 
+if (!fs.existsSync('./backup')) {
+    fs.mkdirSync('./backup')
+}
+if (!fs.existsSync('./settings.sqlite')) {
 
-if (!fs.existsSync('./database.sqlite')) {
-
-    window.db = new sqlite3.Database('./database.sqlite', (err) => {
+    window.sdb = new sqlite3.Database('./settings.sqlite', (err) => {
         if (err) {
             console.error(err.message);
         }
-        console.log('Connected to the database.');
+        console.log('Connected to the settings database.');
     });
 
     const values = [
@@ -42,20 +44,9 @@ if (!fs.existsSync('./database.sqlite')) {
         { name: 'table_per_page', val: '3' },
         { name: 'row_per_table', val: '40' },
         { name: 'font_size', val: '17' },
-
-
-
     ]
-    window.db.serialize(() => {
-        window.db.run(`CREATE TABLE "tmp" (
-        "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-        "meter_no"	TEXT NOT NULL,
-        "amount"	REAL NOT NULL,
-        "vamount"	REAL NOT NULL,
-        "vat"	REAL NOT NULL,
-        "rev"	REAL NOT NULL,
-        "date" date DEFAULT CURRENT_DATE
-      )`)
+    window.sdb.serialize(() => {
+        window.sdb
             .run(`CREATE TABLE settings(
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL,
@@ -67,11 +58,11 @@ if (!fs.existsSync('./database.sqlite')) {
               VALUES ('date')`)
     });
 } else {
-    window.db = new sqlite3.Database('./database.sqlite', (err) => {
+    window.sdb = new sqlite3.Database('./settings.sqlite', (err) => {
         if (err) {
             console.error(err.message);
         }
-        console.log('Connected to the database.');
+        console.log('Connected to the settings database.');
     });;
 }
 

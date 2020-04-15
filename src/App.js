@@ -19,6 +19,7 @@ import View from './pages/records';
 import Settings from './Settings';
 import { FormatDate } from './utils';
 import DayOpen from './pages/dayopen';
+const sqlite3 = window.nw.require('sqlite3').verbose();
 
 // import styles from './App.module.css';
 
@@ -137,7 +138,7 @@ function Menu() {
     <div className={classes.menus}>
       <Button to="/home" component={Link} variant="contained" color="primary">Home</Button>
       {/* {!context.status && <Link to="/settings">Settings</Link>} */}
-      {context.settings.date && <Button to="/settings" component={Link} variant="contained" color="primary">Settings</Button>}
+      {<Button to="/settings" component={Link} variant="contained" color="primary">Settings</Button>}
       {context.settings.date && <Button to="/view" component={Link} variant="contained" color="primary">View</Button>}
       <Button to="/records" component={Link} variant="contained" color="primary">Records</Button>
       {context.settings.date && <Button to="/close" component={Link} variant="contained" className={classes.closebtn}>Close Day</Button>}
@@ -154,6 +155,7 @@ function Menu() {
 
 function App() {
   const [reload, setReload] = useState(null);
+  const [dbloaded,setDbloaded]=useState(false);
   const [settings, setSettings] = useState({});
 
   const reloadSettings = () => {
@@ -171,7 +173,7 @@ function App() {
 
   useEffect(() => {
     function getdata() {
-      window.db.all(`SELECT * FROM settings`, (err, row) => {
+      window.sdb.all(`SELECT * FROM settings`, (err, row) => {
         if (err) {
           // throw err;
           NotificationManager.error('Failed!', 'Failed to retrive Settings Data')
@@ -186,6 +188,51 @@ function App() {
     }
     getdata()
   }, [reload])
+
+  useEffect(() => {
+    setDbloaded(false);
+    const filename = Buffer.from(settings.date ? settings.date : '').toString('base64');
+    console.log(settings.date)
+    if (filename) {
+      console.log(filename)
+      window.db = new sqlite3.Database(`./backup/${filename}.sqlite`, (err) => {
+        if (err) {
+          console.error(err.message);
+        }
+        console.log('Connected to the backup database.');
+        // window.db.all(`SELECT * FROM tmp`, (err, row) => {
+        //   if (err) {
+        //     // throw err;
+        //     NotificationManager.error('Failed!', 'Failed to retrive Table Data')
+        //   }
+        //  console.log(row);
+         
+          window.db.run(`CREATE TABLE if not exists "tmp" (
+            "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+            "meter_no"	TEXT NOT NULL,
+            "amount"	REAL NOT NULL,
+            "vamount"	REAL NOT NULL,
+            "vat"	REAL NOT NULL,
+            "rev"	REAL NOT NULL,
+            "date" date DEFAULT CURRENT_DATE
+          )`,(err)=>{
+            if(err){
+              NotificationManager.error("Table creation failed","Fatal")
+              console.log(err)
+              throw err;
+            }
+            setDbloaded(true)
+          })
+         
+        })
+        // if (context.reloadSettings) {
+        //     context.reloadSettings()
+        // }else{
+        //     throw Error('Unable to Reload Settings')
+        // }
+      // });
+    }
+  }, [settings.date])
 
   const classes = makeStyles(theme => ({
     root: {
@@ -254,17 +301,17 @@ function App() {
 
             </div>
             <div className={classes.decoration}>
-            <img src={windmill} alt="Logo" style={{
-              position: 'fixed',
-              bottom: 0,
-              zIndex: -100,
-            }} />
-            <img src={windmill} alt="Logo" style={{
-              position: 'fixed',
-              bottom: 0,
-              right: 0,
-              zIndex: -100,
-            }} />
+              <img src={windmill} alt="Logo" style={{
+                position: 'fixed',
+                bottom: 0,
+                zIndex: -100,
+              }} />
+              <img src={windmill} alt="Logo" style={{
+                position: 'fixed',
+                bottom: 0,
+                right: 0,
+                zIndex: -100,
+              }} />
             </div>
             <div className={classes.content}>
               {/* <div className={classes.cover}> */}
@@ -275,7 +322,7 @@ function App() {
 
               <Route path="/home">
                 {!settings.date && <DayOpen />}
-                {settings.date && <FreshDay />}
+                {settings.date && dbloaded && <FreshDay />}
               </Route>
               {!settings.date && <Redirect to="/home" />}
               <Route path="/records">

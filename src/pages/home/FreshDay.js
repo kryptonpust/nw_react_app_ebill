@@ -76,8 +76,7 @@ export default function FreshDay() {
 
     editShortcut.on('active', function () {
       setEnableSl(old => !old)
-      if(slRef)
-      {
+      if (slRef) {
         slRef.current.focus()
       }
     });
@@ -192,7 +191,7 @@ export default function FreshDay() {
             id="sl"
             type="number"
             variant="outlined"
-            style={{ width: '8rem' }}
+            style={{ width: '10rem' }}
             inputRef={slRef}
             inputProps={{ min: 0 }}
             disabled={!enablesl}
@@ -361,8 +360,7 @@ export default function FreshDay() {
                   }
                 }
               } else if (event.key === ' ') {
-                if(pushRef)
-                {
+                if (pushRef) {
                   pushRef.current.animate()
                 }
                 setInputs(old => ({ ...old, vat: 0 }))
@@ -437,8 +435,7 @@ export default function FreshDay() {
                   }
                 }
               } else if (event.key === ' ') {
-                if(pushRef)
-                {
+                if (pushRef) {
                   pushRef.current.animate()
                 }
                 setInputs(old => ({ ...old, vat: 0 }))
@@ -472,11 +469,18 @@ export default function FreshDay() {
           <PushButton
             ref={pushRef}
             onLongClick={() => {
+              if (pushed) {
+                meterRef.current.focus()
+              } else {
+                setInputs(old => ({ ...old, vat: 0 }))
+                setTimeout(() => {
+                  vatRef.current.select()
+                }, 100)
+              }
+
               setPushed(old => !old)
-              setInputs(old => ({ ...old, vat: 0 }))
-              setTimeout(() => {
-                vatRef.current.select()
-              }, 100)
+
+
             }}
             singleClick={() => {
               if (pushed) {
@@ -494,12 +498,15 @@ export default function FreshDay() {
       </Paper>
 
 
-      {<CustomTable tableRef={tableEl} len={len} onChange={(oldData) => {
+      {<CustomTable tableRef={tableEl} len={len} onDelete={(oldData) => {
         setLen(len => len - 1);
         setInputs(old => ({ ...old, sl: old.sl - 1 }))
         setSummery(old => ({ amount: old.amount - oldData.amount, vamount: old.vamount - oldData.vamount, vat: old.vat - oldData.vat, rev: old.rev - oldData.rev }))
         setEnableSl(false)
-      }} />}
+      }}
+        onUpdate={(oldData, newData) => {
+          setSummery(old => ({ ...old, amount: old.amount - (newData.amount - oldData.amount) }))
+        }} />}
     </div>
   )
 }

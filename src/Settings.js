@@ -56,7 +56,7 @@ const Field = (props) => {
             {props.data.val && props.data.val !== data && <Button variant="contained" color="secondary"
                 onClick={() => {
                     if (props.data.name) {
-                        window.db.run(`UPDATE settings SET val=? WHERE name=?`, [data, props.data.name], (err) => {
+                        window.sdb.run(`UPDATE settings SET val=? WHERE name=?`, [data, props.data.name], (err) => {
                             if (err) {
                                 NotificationManager.error('Failed!', 'Failed to UPDATE Data')
                                 throw err;
@@ -133,7 +133,7 @@ const RadioField = (props) => {
             {props.data.val && props.data.val !== data && <Button variant="contained" color="secondary"
                 onClick={() => {
                     if (props.data.name) {
-                        window.db.run(`UPDATE settings SET val=? WHERE name=?`, [data, props.data.name], (err) => {
+                        window.sdb.run(`UPDATE settings SET val=? WHERE name=?`, [data, props.data.name], (err) => {
                             if (err) {
                                 NotificationManager.error('Failed!', 'Failed to UPDATE Data')
                                 throw err;
@@ -211,7 +211,7 @@ const SwitchField = (props) => {
                 {props.data.val && props.data.val !== data && <Button variant="contained" color="secondary"
                     onClick={() => {
                         if (props.data.name) {
-                            window.db.run(`UPDATE settings SET val=? WHERE name=?`, [data, props.data.name], (err) => {
+                            window.sdb.run(`UPDATE settings SET val=? WHERE name=?`, [data, props.data.name], (err) => {
                                 if (err) {
                                     NotificationManager.error('Failed!', 'Failed to UPDATE Data')
                                     throw err;
@@ -285,7 +285,7 @@ function FieldRevenue(props) {
             {((props.data1.val && props.data1.val !== data1) || (props.data2.val && props.data2.val !== data2)) && <Button variant="contained" color="secondary"
                 onClick={() => {
                     if (props.data1.name && props.data2.name) {
-                        window.db.run(`UPDATE settings SET val=? WHERE name=?`, [data1, props.data1.name], (err) => {
+                        window.sdb.run(`UPDATE settings SET val=? WHERE name=?`, [data1, props.data1.name], (err) => {
                             if (err) {
                                 NotificationManager.error('Failed!', 'Failed to UPDATE Data')
                                 throw err;
@@ -295,7 +295,7 @@ function FieldRevenue(props) {
                             }
 
 
-                            window.db.run(`UPDATE settings SET val=? WHERE name=?`, [data2, props.data2.name], (err) => {
+                            window.sdb.run(`UPDATE settings SET val=? WHERE name=?`, [data2, props.data2.name], (err) => {
                                 if (err) {
                                     NotificationManager.error('Failed!', 'Failed to UPDATE Data')
                                     throw err;

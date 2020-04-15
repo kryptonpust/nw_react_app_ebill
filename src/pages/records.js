@@ -10,6 +10,7 @@ const createCsvWriter = window.nw.require('csv-writer').createObjectCsvWriter;
 
 const fs = window.nw.require('fs');
 export default function View() {
+    const context = useContext(RootContext)
 
     const [backups, setBackups] = useState([])
     const [date, setdate] = useState('');
@@ -89,9 +90,12 @@ export default function View() {
                 </div>
                 <div className={classes.records}>
                     {backups.map((val, idx) => {
-                        return (<PreRecord name={val} key={idx} onChange={(val) => {
-                            setdate(val);
-                        }} />)
+                        if (context.settings.date!== val.toString() ) {
+                            return (<PreRecord name={val} key={idx} onChange={(val) => {
+                                setdate(val);
+                            }} />)
+                        }
+
                     })}
                 </div>
             </div>
@@ -148,9 +152,8 @@ const PreRecord = (props) => {
             type="file"
             nwsaveas={`Ebill_${props.name.toString()}.csv`}
             onChange={e => {
-                const savepath=e.target.value.toString()
-                if(savepath)
-                {
+                const savepath = e.target.value.toString()
+                if (savepath) {
                     const filename = Buffer.from(props.name).toString('base64');
                     const db = new sqlite3.Database(`./backup/${filename}.sqlite`, (err) => {
                         if (err) {
@@ -165,19 +168,19 @@ const PreRecord = (props) => {
                         const csvWriter = createCsvWriter({
                             path: savepath,
                             header: [
-                                {id: 'id', title: 'id'},
-                                {id: 'meter_no', title: 'meter_no'},
-                                {id: 'amount', title: 'amount'},
+                                { id: 'id', title: 'id' },
+                                { id: 'meter_no', title: 'meter_no' },
+                                { id: 'amount', title: 'amount' },
                                 // {id: 'vamount', title: 'vamount'},
-                                {id: 'vat', title: 'vat'},
-                                {id: 'rev', title: 'rev'},
-                                {id: 'date', title: 'date'},
+                                { id: 'vat', title: 'vat' },
+                                { id: 'rev', title: 'rev' },
+                                { id: 'date', title: 'date' },
                             ]
                         });
                         csvWriter.writeRecords(row)
-                        .then(()=>{
-                            console.log('Exported directory: ',savepath)
-                        })
+                            .then(() => {
+                                console.log('Exported directory: ', savepath)
+                            })
                     })
                 }
             }}

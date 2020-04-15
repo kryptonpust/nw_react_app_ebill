@@ -35,7 +35,7 @@ export default function CustomTable(props) {
             {
                 title: "Bill Amount", field: "amount", type: "numeric", filtering: false,
                 // currencySetting:{ currencyCode: '', minimumFractionDigits: 4, maximumFractionDigits: 5},
-                render: rowData => <Fragment>{rowData.amount.toFixed(parseFloat(context.settings.precision_calculate))}</Fragment>,
+                render: rowData => <Fragment>{`TK.${rowData.amount.toFixed(parseFloat(context.settings.precision_calculate))}/-`}</Fragment>,
                 editComponent: props => {
                     return <TextField
                         type="number"
@@ -59,7 +59,7 @@ export default function CustomTable(props) {
                 field: "vat",
                 type: "numeric",
                 filtering: false,
-                // render: rowData => <Fragment>{rowData.vat.toFixed(precision)}</Fragment>,
+                render: rowData => <Fragment>{`TK.${rowData.vat.toFixed(context.settings.precision_calculate)}/-`}</Fragment>,
 
             },
             {
@@ -67,7 +67,7 @@ export default function CustomTable(props) {
                 field: "rev",
                 type: "numeric",
                 filtering: false,
-                // render: rowData => <Fragment>{rowData.rev.toFixed(precision)}</Fragment>
+                render: rowData => <Fragment>{`TK.${(rowData.rev.toFixed(context.settings.precision_calculate))}/-`}</Fragment>
             }
         ]}
         data={query =>
@@ -168,6 +168,10 @@ export default function CustomTable(props) {
                         // const index = state.indexOf(oldData);
                         // state[index] = newData;
                         // // db.close();
+                        if(props.onUpdate)
+                        {
+                            props.onUpdate(newData,oldData)
+                        }
                         resolve()
                     })
                 }),
@@ -183,8 +187,8 @@ export default function CustomTable(props) {
                         // let state = data;
                         // const index = state.indexOf(oldData);
                         // state.splice(index, 1);
-                        if (props.onChange) {
-                            props.onChange(oldData)
+                        if (props.onDelete) {
+                            props.onDelete(oldData)
                         }
                         setTimeout(() => {
                             resolve()

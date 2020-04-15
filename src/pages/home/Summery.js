@@ -35,10 +35,8 @@ export default function Summery(props) {
         }
     }))();
     useEffect(() => {
-        if (props.summery.amount && props.summery.vat) {
-            context.updateSetting('gtotal', props.summery.amount, false)
-        }
-    }, [context, props.summery.amount, props.summery.vat])
+        context.updateSetting('gtotal', props.summery.amount, false)
+    }, [context, props.summery.amount])
     return (<Paper className={classes.root} elevation={3}>
         {/* <div className={classes.header}>Summery</div> */}
         <table className={classes.table}>

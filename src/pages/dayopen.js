@@ -27,11 +27,14 @@ export default function DayOpen() {
 
     const [date, setDate] = useState(new Date());
 
-    const [reopen, setReopen] = useState(null)
+    const [reopen, setReopen] = useState(false)
+
+    const [filename, setFilename] = useState(null)
 
     useEffect(() => {
         async function getdata() {
             const filename = Buffer.from(date.toLocaleDateString()).toString('base64');
+            setFilename(filename);
             if (fs.existsSync(`./backup/${filename}.sqlite`)) {
                 setReopen(filename);
             }
@@ -43,36 +46,38 @@ export default function DayOpen() {
         <div className={classes.root}>
             <Calendar
                 value={date} />
-            {!reopen && <Button variant="outlined" color="secondary"
+            <Button variant="outlined" color="secondary"
                 onClick={() => {
-                    const val = date.toLocaleDateString();
-                    window.db.run(`UPDATE settings SET val=? WHERE name=?`, [val, 'date'], (err) => {
-                        if (err) {
-                            NotificationManager.error('Failed!', 'Failed to UPDATE Data')
-                            throw err;
-                        }
-                        NotificationManager.success('Update Successful')
-                        if (context.settings) {
-                            context.updateSetting('date', val)
-                        }
-                    })
+                        const val = date.toLocaleDateString();
+                        window.sdb.run(`UPDATE settings SET val=? WHERE name=?`, [val, 'date'], (err) => {
+                            if (err) {
+                                NotificationManager.error('Failed!', 'Failed to UPDATE Data')
+                                throw err;
+                            }
+                            // NotificationManager.success('Update Successful')
+                            if (context.settings) {
+                                context.updateSetting('date', val)
+                            }
+                        })
+
+                        // window.db = new sqlite3.Database(`./backup/${filename}.sqlite`, (err) => {
+                        //     if (err) {
+                        //         console.error(err.message);
+                        //     }
+                        //     console.log('Connected to the backup database.');
+                        //     // if (context.reloadSettings) {
+                        //     //     context.reloadSettings()
+                        //     // }else{
+                        //     //     throw Error('Unable to Reload Settings')
+                        //     // }
+                        // });
                 }}
-            >Open A New Day</Button>}
-            {reopen  && <Button variant="outlined" color="secondary"
+            >{reopen ? 'Reopen This Day' : 'Open A New Day'}</Button>
+            {/* {reopen  && <Button variant="outlined" color="secondary"
                 onClick={() => {
-                    window.db = new sqlite3.Database(`./backup/${reopen}.sqlite`, (err) => {
-                        if (err) {
-                            console.error(err.message);
-                        }
-                        console.log('Connected to the backup database.');
-                        if (context.reloadSettings) {
-                            context.reloadSettings()
-                        }else{
-                            throw Error('Unable to Reload Settings')
-                        }
-                    });
+                    
                 }}
-            >Reopen This Day</Button>}
+            >Reopen This Day</Button>} */}
         </div>
     )
 }

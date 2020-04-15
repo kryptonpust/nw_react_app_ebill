@@ -4,7 +4,6 @@ import React, { useContext, useState } from 'react';
 import RootContext from '../context/RootContext';
 
 const fs = window.nw.require('fs');
-const sqlite3 = window.nw.require('sqlite3').verbose();
 
 export default function CloseDay() {
     const [show, setShow] = useState(false);
@@ -48,7 +47,7 @@ export default function CloseDay() {
     return (<div className={classes.root}>
         <Paper elevation={3} className={classes.paper}>
             <h1>Today's Grand Total</h1>
-            <TextField variant="outlined" type="number"
+            {context.settings.gtotal && <TextField variant="outlined" type="number"
                 onChange={(event) => {
                     setData(event.target.value)
                 }}
@@ -58,9 +57,9 @@ export default function CloseDay() {
                     style: { color: 'red', fontSize: '2rem' },
 
                 }}
-            />
+            />}
             {<Button className={classes.btn} variant="contained"
-                disabled={parseFloat(context.settings.gtotal) !== parseFloat(data)}
+                disabled={context.settings.gtotal && parseFloat(context.settings.gtotal) !== parseFloat(data)}
                 onClick={async () => {
                     setShow(true)
                     if (!fs.existsSync('./backup')) {
@@ -72,27 +71,10 @@ export default function CloseDay() {
 
                     } else {
                         window.db.close()
-                        const filename = Buffer.from(context.settings.date).toString('base64');
-                        fs.copyFile('./database.sqlite', `./backup/${filename}.sqlite`, (err) => {
-                            if (err) throw err;
-                            console.log('source.db was copied to destination.db');
-
-                            const db = new sqlite3.Database('./database.sqlite', (err) => {
-                                if (err) {
-                                    console.error(err.message);
-                                }
-                                console.log('Connected to the database.');
-                                db.serialize(() => {
-                                    db.run(`UPDATE settings SET val=? WHERE name=?`, [null, 'date'])
-                                        .run(`DELETE FROM tmp`, (err, row) => {
-                                            // window.nw.Window.get().reload()
-                                            console.log("Db cleaned up")
-                                        })
-                                })
-                            });
-
-
-                        });
+                        window.sdb.run(`UPDATE settings SET val=? WHERE name=?`, [null, 'date'], (err, row) => {
+                            window.nw.Window.get().reload()
+                            console.log("Db cleaned up")
+                        })
                     }
 
                 }}
