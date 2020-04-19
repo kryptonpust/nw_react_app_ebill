@@ -76,7 +76,10 @@ export default function Greetings() {
             },
         },
         info: {
-            position: 'fixed',
+            [theme.breakpoints.up('md')]: {
+                position: 'fixed',
+
+            },
             backdropFilter: 'blur(20px)',
 
             "& > * ":
@@ -122,24 +125,23 @@ export default function Greetings() {
                 </div>
 
             </div>
-            <div>
-                <div className={classes.info} style={{ right: 0, bottom: 0 }}>
-                    <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-                        DEVELOPED BY
-                </div>
-                    <div style={{ color: '#22e622', fontSize: '1.2rem' }}>
-                        NAFIUL RONY
-                </div>
-                    <div>Email: nafiul.ice.pust@gmail.com</div>
-                    <div>
-                        Information and Communication Engineering(ICE)
-                </div>
-                    <div>
-                        Pabna University of Science and Technology(PUST)
-                </div>
-                </div>
 
-
+            <div className={classes.info} style={{ right: 0, bottom: 0 }}>
+                <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
+                    DEVELOPED BY
+                </div>
+                <div style={{ color: '#22e622', fontSize: '1.2rem' }}>
+                    NAFIUL RONY
+                </div>
+                <div>Email: nafiul.ice.pust@gmail.com</div>
+                <div>
+                    Information and Communication Engineering(ICE)
+                </div>
+                <div>
+                    Pabna University of Science and Technology(PUST)
+                </div>
             </div>
+
+
         </div>)
 }
