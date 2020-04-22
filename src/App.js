@@ -195,7 +195,7 @@ function App() {
     console.log(settings.date)
     if (filename) {
       console.log(filename)
-      window.db = new sqlite3.Database(`./backup/${filename}.sqlite`, (err) => {
+      window.db = new sqlite3.Database(window.path+`/backup/${filename}.sqlite`, (err) => {
         if (err) {
           console.error(err.message);
         }

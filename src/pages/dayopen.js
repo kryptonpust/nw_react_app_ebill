@@ -35,7 +35,7 @@ export default function DayOpen() {
         async function getdata() {
             const filename = Buffer.from(date.toLocaleDateString()).toString('base64');
             setFilename(filename);
-            if (fs.existsSync(`./backup/${filename}.sqlite`)) {
+            if (fs.existsSync(window.path+`/backup/${filename}.sqlite`)) {
                 setReopen(filename);
             }
         }

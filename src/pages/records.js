@@ -16,10 +16,10 @@ export default function View() {
     const [date, setdate] = useState('');
     useEffect(() => {
         async function getdata() {
-            if (!fs.existsSync('./backup')) {
-                fs.mkdirSync('./backup')
+            if (!fs.existsSync(window.path+'/backup')) {
+                fs.mkdirSync(window.path+'/backup')
             }
-            const res = await fs.readdirSync('./backup').map((val) => {
+            const res = await fs.readdirSync(window.path+'/backup').map((val) => {
                 const temp = Buffer.from(val.split('.')[0], 'base64').toString('ascii');
                 return temp;
             });
@@ -155,7 +155,7 @@ const PreRecord = (props) => {
                 const savepath = e.target.value.toString()
                 if (savepath) {
                     const filename = Buffer.from(props.name).toString('base64');
-                    const db = new sqlite3.Database(`./backup/${filename}.sqlite`, (err) => {
+                    const db = new sqlite3.Database(window.path+`/backup/${filename}.sqlite`, (err) => {
                         if (err) {
                             console.error(err.message);
                         }

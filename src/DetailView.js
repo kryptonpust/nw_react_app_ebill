@@ -181,7 +181,7 @@ export default function DetailsView(props) {
             setSettings({...context.settings,date: props.date})
 
                 const filename = Buffer.from(props.date).toString('base64');
-                const db = new sqlite3.Database(`./backup/${filename}.sqlite`, (err) => {
+                const db = new sqlite3.Database(window.path+`/backup/${filename}.sqlite`, (err) => {
                     if (err) {
                         console.error(err.message);
                     }

@@ -6,17 +6,20 @@ import './fonts/arial.ttf'
 import './fonts/Arial_Rounded_MT_Bold.ttf'
 import './index.css';
 import App from './App';
+import Ebill from './images/Ebill.png'
 import * as serviceWorker from './serviceWorker';
 
 const sqlite3 = window.nw.require('sqlite3').verbose();
 const fs = window.nw.require('fs')
+window.path=window.nw.App.dataPath
+console.log(window.path)
 
-if (!fs.existsSync('./backup')) {
-    fs.mkdirSync('./backup')
+if (!fs.existsSync(window.path+'/backup')) {
+    fs.mkdirSync(window.path+'/backup')
 }
-if (!fs.existsSync('./settings.sqlite')) {
+if (!fs.existsSync(window.path+'/settings.sqlite')) {
 
-    window.sdb = new sqlite3.Database('./settings.sqlite', (err) => {
+    window.sdb = new sqlite3.Database(window.path+'/settings.sqlite', (err) => {
         if (err) {
             console.error(err.message);
         }
@@ -61,7 +64,7 @@ if (!fs.existsSync('./settings.sqlite')) {
               VALUES ('date')`)
     });
 } else {
-    window.sdb = new sqlite3.Database('./settings.sqlite', (err) => {
+    window.sdb = new sqlite3.Database(window.path+'/settings.sqlite', (err) => {
         if (err) {
             console.error(err.message);
         }
