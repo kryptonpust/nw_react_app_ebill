@@ -502,7 +502,7 @@ function TopSheet(props) {
                 <h4>{props.settings.bill_end_title ? props.settings.bill_end_title : 'undefined'}</h4>
                 <br></br>
                 <p className={classes.stamp}>
-                    {props.settings.user_name ? props.settings.user_name : 'undefined'}
+                    <span style={{fontFamily: props.settings.user_name_font}}>{props.settings.user_name ? props.settings.user_name : 'undefined'}</span>
                     <br></br>
                     {props.settings.user_designation ? props.settings.user_designation : 'undefined'}
                     <br></br>

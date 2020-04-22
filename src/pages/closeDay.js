@@ -31,9 +31,11 @@ export default function CloseDay() {
             }
         },
         btn: {
-            background: 'linear-gradient(45deg, #2196F3 0%, #21CBF3 90%)',
+            // background: 'linear-gradient(45deg, #2196F3 0%, #21CBF3 90%)',
+            background: 'linear-gradient(97deg, rgba(63,94,251,1) 0%, rgba(191,52,157,1) 100%)',
             boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
-            color: 'white',
+            color: '#37ff92',
+            fontWeight: 'bold',
             " &: hover": {
                 boxShadow: '0 6px 10px 4px rgba(33, 203, 243, .3)',
 

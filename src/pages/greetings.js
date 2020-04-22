@@ -104,7 +104,7 @@ export default function Greetings() {
             </div>
             <div className={classes.footer}>
                 <Slide direction="up" in timeout={2000}>
-                    <div>
+                    <div style={{color:'#37ff92'}}>
                         A Concept of <br></br> Electriciy Bill Calculation
                 </div>
                 </Slide>
@@ -112,16 +112,16 @@ export default function Greetings() {
 
             <div className={classes.info} style={{ left: 0, bottom: 0 }}>
                 <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-                    CONCEPT &amp; DESIGNED BY
+                    Concept &amp; Designed By
                 </div>
-                <div style={{ color: 'red', fontSize: '1.2rem' }}>
+                <div style={{ color: 'purple', fontSize: '1.2rem',fontFamily: 'Arial_Rounded_MT_Bold' }}>
                     Md. Maidul islam (Mahid)
                 </div>
                 <div>
                     2nd Officer
                 </div>
                 <div>
-                    RAKUB, Mollaparahat br.
+                    RAKUB, Mollaparahat branch
                 </div>
 
             </div>

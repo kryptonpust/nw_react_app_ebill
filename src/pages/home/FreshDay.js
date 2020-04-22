@@ -168,7 +168,7 @@ export default function FreshDay() {
   return (
     <div className={classes.root}>
       <Paper className={classes.input} elevation={3}>
-        <h2 style={{ textDecoration: 'underline' , color: '#2a70ef', textTransform: 'uppercase'}}>Electricity Bill Input</h2>
+        <h2 style={{ textDecoration: 'underline' , color: '#2a70ef'}}>Electricity Bill Input</h2>
         <Summery summery={summery} precision={context.settings.precision_calculate} />
 
         <div className={classes.fields}>

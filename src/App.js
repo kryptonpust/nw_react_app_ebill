@@ -109,9 +109,9 @@ function Menu() {
       // color: 'greenyellow',
 
       textAlign: 'center',
-      color: 'rgba(255,255,255,0.9)',
+      color: 'red',
       borderRadius: '5px',
-      background: 'linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5)',
+      background: 'linear-gradient(-45deg, #FFA63D, #338AFF, #3CF0C5)',
       backgroundSize: '600%',
       animation: `$anime 16s linear infinite`,
     },
@@ -141,7 +141,7 @@ function Menu() {
       {<Button to="/settings" component={Link} variant="contained" color="primary">Settings</Button>}
       {context.settings.date && <Button to="/view" component={Link} variant="contained" color="primary">View</Button>}
       <Button to="/records" component={Link} variant="contained" color="primary">Records</Button>
-      {context.settings.date && <Button to="/close" component={Link} variant="contained" className={classes.closebtn}>Close Day</Button>}
+      {context.settings.date && <Button to="/close" component={Link} variant="contained" className={classes.closebtn}>DAY CLOSE</Button>}
     </div>
 
 

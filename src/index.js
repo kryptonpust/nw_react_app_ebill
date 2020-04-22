@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './fonts/bookantiqua.ttf'
 import './fonts/CalibriRegular.ttf'
 import './fonts/arial.ttf'
+import './fonts/Arial_Rounded_MT_Bold.ttf'
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -35,6 +36,8 @@ if (!fs.existsSync('./settings.sqlite')) {
         { name: 'bill_title', val: 'Daily Electricity Bill Register' },
         { name: 'bill_end_title', val: 'Following Amount is received by' },
         { name: 'user_name', val: 'Md. Mizanur Rahman' },
+        { name: 'user_name_font', val: 'serif' },
+        { name: 'user_name_size', val: '10px' },
         { name: 'user_designation', val: '(Officer)' },
         { name: 'user_address', val: 'RAKUB, Mollaparahat Branch, Rajshahi' },
         { name: 'ac_no', val: 'CD-47' },

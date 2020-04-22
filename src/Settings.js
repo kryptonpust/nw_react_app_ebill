@@ -7,6 +7,8 @@ import {
     Radio,
     Switch,
     TextField,
+    Select,
+    MenuItem,
 } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
@@ -53,6 +55,17 @@ const Field = (props) => {
                 }}
 
             />
+            {props.fontdata && <Select
+                value={props.fontdata.val ? props.fontdata.val : 'serif'}
+            >
+                <MenuItem value={'serif'}>Serif</MenuItem>
+            </Select>}
+
+            {props.sizedata && <Select
+                value={props.sizedata.val ? props.sizedata.val : 10}
+            >
+                <MenuItem value={10}>10px</MenuItem>
+            </Select>}
             {props.data.val && props.data.val !== data && <Button variant="contained" color="secondary"
                 onClick={() => {
                     if (props.data.name) {
@@ -417,7 +430,10 @@ export default function SimpleTabs() {
                     <Field data={{ name: 'bill_end_title', title: 'Top Sheet Description', val: context.settings['bill_end_title'] }} update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
-                    <Field data={{ name: 'user_name', title: 'Responsible Name', val: context.settings['user_name'] }} update={(key, val) => {
+                    <Field data={{ name: 'user_name', title: 'Responsible Name', val: context.settings['user_name'] }}
+                    // fontdata={{ name: 'user_name_font', val: context.settings['user_name_font'] }} 
+                    // sizedata ={{ name: 'user_name_size', val: context.settings['user_name_size']}}
+                    update={(key, val) => {
                         context.updateSetting(key, val);
                     }} />
                     <Field data={{ name: 'user_designation', title: 'Designation', val: context.settings['user_designation'] }} update={(key, val) => {

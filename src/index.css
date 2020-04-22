@@ -33,3 +33,7 @@ body {
   font-family: 'arial';
   src: url('./fonts/bookantiqua.ttf');
 }
+@font-face{
+  font-family: Arial_Rounded_MT_Bold;
+  src: url('./fonts/Arial_Rounded_MT_Bold.ttf');
+}
